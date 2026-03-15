@@ -14,7 +14,7 @@ body{font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f
 .sb{background:var(--n);padding:10px 20px 0;display:flex;justify-content:space-between}
 .sb span{color:rgba(255,255,255,.8);font-size:11px}
 .hd{background:var(--n);padding:14px 20px 18px;color:#fff}
-.hd-t{font-size:19px;font-weight:500;letter-spacing:-.3px}
+.hd-t{font-size:19px;font-weight:500}
 .hd-s{font-size:11px;opacity:.55;margin-top:2px}
 .mw{background:var(--n);padding:0 16px 16px}
 .map{height:150px;background:#22364a;border-radius:14px;position:relative;overflow:hidden}
@@ -26,7 +26,7 @@ body{font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f
 .pins{width:9px;height:3px;background:rgba(0,0,0,.2);border-radius:50%;margin:3px auto 0}
 .mc{position:absolute;inset:0}
 .car{position:absolute;font-size:16px;background:rgba(254,229,0,.12);border:1px solid rgba(254,229,0,.3);border-radius:5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
-.mi{position:absolute;bottom:10px;right:10px;background:rgba(27,42,59,.85);color:#fff;font-size:11px;padding:4px 10px;border-radius:16px;border:.5px solid rgba(255,255,255,.15)}
+.mi{position:absolute;bottom:10px;right:10px;background:rgba(27,42,59,.85);color:#fff;font-size:11px;padding:4px 10px;border-radius:16px}
 .panel{background:#fff;border-radius:18px 18px 0 0;margin-top:-10px;flex:1;padding:18px 16px;overflow-y:auto}
 .sl{font-size:11px;font-weight:500;color:#999;margin-bottom:8px}
 .rb{background:#f7f8fa;border-radius:13px;margin-bottom:14px}
@@ -47,7 +47,7 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
 .vp{font-size:12px;font-weight:500;color:var(--n);margin-top:4px}
 .farecard{background:var(--n);border-radius:13px;padding:15px;color:#fff;margin-bottom:10px}
 .farero{font-size:11px;opacity:.6;margin-bottom:5px}
-.farenu{font-size:28px;font-weight:500;letter-spacing:-1px}
+.farenu{font-size:28px;font-weight:500}
 .farew{font-size:14px;opacity:.65;margin-left:2px}
 .farerow{display:flex;justify-content:space-between;align-items:flex-start}
 .faretag{font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;background:var(--k);color:var(--kd)}
@@ -59,7 +59,7 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
 .paybtn{flex:1;padding:10px 4px;border-radius:10px;border:1.5px solid #eee;background:#fff;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;text-align:center;transition:all .12s;color:#555}
 .paybtn.on{border-color:var(--n);background:#f0f4f8;color:var(--n)}
 .payico{font-size:15px;display:block;margin-bottom:3px}
-.cta{width:100%;padding:15px;background:var(--k);color:var(--kd);border:none;border-radius:13px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;transition:opacity .12s;letter-spacing:-.3px}
+.cta{width:100%;padding:15px;background:var(--k);color:var(--kd);border:none;border-radius:13px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;transition:opacity .12s}
 .cta:disabled{background:#f0f0f0;color:#ccc;cursor:not-allowed}
 .cta:hover:not(:disabled){opacity:.88}
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;align-items:flex-end;justify-content:center}
@@ -92,97 +92,63 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
 </head>
 <body>
 <div class="phone">
-  <div class="sb"><span id="clk">09:41</span><span>● 운영중</span></div>
-  <div class="hd">
-    <div class="hd-t">나트랑 택시투어</div>
-    <div class="hd-s">Nha Trang Taxi Tour · Xe dịch vụ</div>
-  </div>
+  <div class="sb"><span id="clk">--:--</span><span>&#9679; 운영중</span></div>
+  <div class="hd"><div class="hd-t">나트랑 택시투어</div><div class="hd-s">Nha Trang Taxi Tour</div></div>
   <div class="mw"><div class="map">
     <div class="mr"></div><div class="mr2"></div>
     <div class="mc">
-      <div class="car" style="top:22%;left:14%">🚕</div>
-      <div class="car" style="top:50%;right:16%">🚕</div>
-      <div class="car" style="top:28%;right:40%">🚌</div>
+      <div class="car" style="top:22%;left:14%">&#128661;</div>
+      <div class="car" style="top:50%;right:16%">&#128661;</div>
+      <div class="car" style="top:28%;right:40%">&#128652;</div>
     </div>
     <div class="mp"><div class="pinb"><div class="pind"></div></div><div class="pins"></div></div>
     <div class="mi">인근 차량 3대 대기중</div>
   </div></div>
-
   <div class="panel" id="bookingPanel">
     <div class="sl">경로 선택</div>
     <div class="rb">
-      <div class="rr">
-        <div class="dot ds"></div>
+      <div class="rr"><div class="dot ds"></div>
         <select id="fromSel" onchange="onRoute()">
           <option value="">출발지 선택</option>
-          <option value="camranh">✈ 캄란 공항 (Cam Ranh)</option>
-          <option value="city">🏙 나트랑 시내</option>
+          <option value="camranh">&#9992; 캄란 공항 (Cam Ranh)</option>
+          <option value="city">&#127961; 나트랑 시내</option>
         </select>
       </div>
-      <div class="rr">
-        <div class="dot de"></div>
+      <div class="rr"><div class="dot de"></div>
         <select id="toSel" onchange="onRoute()">
           <option value="">도착지 선택</option>
-          <option value="city">🏙 나트랑 시내</option>
-          <option value="camranh">✈ 캄란 공항 (Cam Ranh)</option>
+          <option value="city">&#127961; 나트랑 시내</option>
+          <option value="camranh">&#9992; 캄란 공항 (Cam Ranh)</option>
         </select>
       </div>
     </div>
-
     <div id="vehicleSec" style="display:none">
       <div class="sl">차량 선택</div>
       <div class="vg">
-        <div class="vc" id="card-s" onclick="pickVehicle('s')">
-          <div class="vi">🚕</div><div class="vn">소형</div>
-          <div class="vca">4~7인승</div><div class="vp" id="pr-s">-</div>
-        </div>
-        <div class="vc" id="card-v" onclick="pickVehicle('v')">
-          <div class="vi">🚌</div><div class="vn">16인승</div>
-          <div class="vca">미니버스</div><div class="vp" id="pr-v">-</div>
-        </div>
-        <div class="vc" id="card-b" onclick="pickVehicle('b')">
-          <div class="vi">🚎</div><div class="vn">29인승</div>
-          <div class="vca">중형버스</div><div class="vp" id="pr-b">-</div>
-        </div>
-        <div class="vc" id="card-B" onclick="pickVehicle('B')">
-          <div class="vi">🚍</div><div class="vn">45인승</div>
-          <div class="vca">대형버스</div><div class="vp" id="pr-B">-</div>
-        </div>
+        <div class="vc" id="card-s" onclick="pickV('s')"><div class="vi">&#128661;</div><div class="vn">소형</div><div class="vca">4~7인승</div><div class="vp" id="pr-s">-</div></div>
+        <div class="vc" id="card-v" onclick="pickV('v')"><div class="vi">&#128652;</div><div class="vn">16인승</div><div class="vca">미니버스</div><div class="vp" id="pr-v">-</div></div>
+        <div class="vc" id="card-b" onclick="pickV('b')"><div class="vi">&#128654;</div><div class="vn">29인승</div><div class="vca">중형버스</div><div class="vp" id="pr-b">-</div></div>
+        <div class="vc" id="card-B" onclick="pickV('B')"><div class="vi">&#128653;</div><div class="vn">45인승</div><div class="vca">대형버스</div><div class="vp" id="pr-B">-</div></div>
       </div>
     </div>
-
     <div id="fareSec" style="display:none">
       <div class="farecard">
-        <div class="farero" id="fareRoute">-</div>
-        <div class="farerow">
-          <div>
-            <span class="farenu" id="fareNum">-</span>
-            <span class="farew">₫</span>
-          </div>
-          <div class="faretag" id="fareTag">일반 요금</div>
-        </div>
-        <div class="faredet" id="fareDetail">약 45분 소요</div>
+        <div class="farero" id="fareRoute"></div>
+        <div class="farerow"><div><span class="farenu" id="fareNum"></span><span class="farew">d</span></div><div class="faretag" id="fareTag">일반 요금</div></div>
+        <div class="faredet" id="fareDetail"></div>
       </div>
-      <div class="nn" id="nightNotice">🌙 야간 할증 적용 (19:00 이후)</div>
+      <div class="nn" id="nightNotice">&#127769; 야간 할증 적용 (19:00 이후)</div>
       <div class="sl">결제 수단</div>
       <div class="payr">
-        <button class="paybtn on" id="pay-g" onclick="setPay('g')">
-          <span class="payico">💳</span>GLN
-        </button>
-        <button class="paybtn" id="pay-t" onclick="setPay('t')">
-          <span class="payico">✈</span>트래플월렛
-        </button>
-        <button class="paybtn" id="pay-c" onclick="setPay('c')">
-          <span class="payico">💵</span>현금
-        </button>
+        <button class="paybtn on" id="pay-g" onclick="setPay('g')"><span class="payico">&#128179;</span>GLN</button>
+        <button class="paybtn" id="pay-t" onclick="setPay('t')"><span class="payico">&#9992;</span>트래플월렛</button>
+        <button class="paybtn" id="pay-c" onclick="setPay('c')"><span class="payico">&#128181;</span>현금</button>
       </div>
     </div>
-
     <button class="cta" id="ctaBtn" disabled onclick="openSheet()">출발지와 도착지를 선택해주세요</button>
   </div>
-
   <div class="done" id="donePanel">
-    <div class="donecirc">✓</div>
+    <div class="donecirc">&#10003;</div>
     <div class="donetit">예약 접수 완료!</div>
     <div class="donesub" id="doneSub"></div>
     <div class="doneid" id="doneId"></div>
@@ -193,188 +159,97 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
     </div>
     <button class="resetbtn" onclick="resetApp()">새 예약하기</button>
   </div>
-
   <div class="tb">
-    <div class="tab on"><span class="tabico">🚕</span>택시</div>
-    <div class="tab"><span class="tabico">🗺</span>투어</div>
-    <div class="tab"><span class="tabico">📋</span>내 예약</div>
+    <div class="tab on" onclick="showTab(0)"><span class="tabico">&#128661;</span>택시</div>
+    <div class="tab" onclick="showTab(1)"><span class="tabico">&#128506;</span>투어</div>
+    <div class="tab" onclick="showTab(2)"><span class="tabico">&#128203;</span>내 예약</div>
   </div>
 </div>
-
-<div class="ov" id="overlay">
-  <div class="sh">
-    <div class="shbar"></div>
-    <div class="shtit">예약 최종 확인</div>
-    <div id="sheetRows"></div>
-    <div class="sbtns">
-      <button class="sbtnc" onclick="closeSheet()">취소</button>
-      <button class="sbtno" onclick="submitBook()">예약 완료 🚕</button>
-    </div>
+<div class="ov" id="overlay"><div class="sh">
+  <div class="shbar"></div>
+  <div class="shtit">예약 최종 확인</div>
+  <div id="sheetRows"></div>
+  <div class="sbtns">
+    <button class="sbtnc" onclick="closeSheet()">취소</button>
+    <button class="sbtno" onclick="submitBook()">예약 완료 &#128661;</button>
   </div>
-</div>
-
+</div></div>
 <script>
-const FBCFG = {
-  apiKey: "AIzaSyAEzcyWQKvUH8FMtujWcqGNKjWx18LxswI",
-  authDomain: "nhatrang-taxi.firebaseapp.com",
-  projectId: "nhatrang-taxi",
-  storageBucket: "nhatrang-taxi.firebasestorage.app",
-  messagingSenderId: "647488499522",
-  appId: "1:647488499522:web:a341a36256062e78a122db"
-};
+var FBCFG={apiKey:"AIzaSyAEzcyWQKvUH8FMtujWcqGNKjWx18LxswI",authDomain:"nhatrang-taxi.firebaseapp.com",projectId:"nhatrang-taxi",storageBucket:"nhatrang-taxi.firebasestorage.app",messagingSenderId:"647488499522",appId:"1:647488499522:web:a341a36256062e78a122db"};
 firebase.initializeApp(FBCFG);
-const db = firebase.firestore();
-
-const FARES = {
-  s: {d: 250000, n: 300000},
-  v: {d: 550000, n: 650000},
-  b: {d: 900000, n: 1050000},
-  B: {d: 1300000, n: 1500000}
-};
-const VNAME = {
-  s: '소형 (4~7인승)',
-  v: '16인승 미니버스',
-  b: '29인승 중형버스',
-  B: '45인승 대형버스'
-};
-const LSHORT = {camranh: '캄란 공항', city: '나트랑 시내'};
-const LFULL  = {camranh: '✈ 캄란 공항 (Cam Ranh)', city: '🏙 나트랑 시내'};
-const PNAME  = {g: 'GLN', t: '트래플월렛', c: '현금'};
-
-let curVeh = null;
-let curPay = 'g';
-
-function isNight() { return new Date().getHours() >= 19; }
-function nowStr() {
-  const d = new Date();
-  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+var db=firebase.firestore();
+var FARES={s:{d:250000,n:300000},v:{d:550000,n:650000},b:{d:900000,n:1050000},B:{d:1300000,n:1500000}};
+var VNAME={s:"소형 (4~7인승)",v:"16인승 미니버스",b:"29인승 중형버스",B:"45인승 대형버스"};
+var LSHORT={camranh:"캄란 공항",city:"나트랑 시내"};
+var LFULL={camranh:"캄란 공항 (Cam Ranh)",city:"나트랑 시내"};
+var PNAME={g:"GLN",t:"트래플월렛",c:"현금"};
+var curVeh=null,curPay="g";
+function isNight(){return new Date().getHours()>=19;}
+function nowStr(){var d=new Date();return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);}
+function updateClock(){document.getElementById("clk").textContent=nowStr();}
+updateClock();
+setInterval(updateClock,10000);
+function showTab(idx){
+  var tabs=document.querySelectorAll(".tab");
+  tabs.forEach(function(t,i){t.classList.toggle("on",i===idx);});
+  var bp=document.getElementById("bookingPanel");
+  if(idx===0){bp.style.display="block";}
+  else if(idx===1){bp.innerHTML='<div style="padding:40px 20px;text-align:center;color:#888">투어 문의는 카카오킡 나트랑택시투어로 연락주세요</div>';}
+  else{bp.innerHTML='<div style="padding:40px 20px;text-align:center;color:#888">예약 내역이 없습니다</div>';}
 }
-setInterval(function() {
-  document.getElementById('clk').textContent = nowStr();
-}, 10000);
-
-function onRoute() {
-  const f = document.getElementById('fromSel').value;
-  const t = document.getElementById('toSel').value;
-  const btn = document.getElementById('ctaBtn');
-  Array.from(document.getElementById('toSel').options).forEach(function(o) {
-    if (o.value && o.value === f) { o.disabled = true; o.hidden = true; }
-    else { o.disabled = false; o.hidden = false; }
-  });
-  if (!f || !t || f === t) {
-    document.getElementById('vehicleSec').style.display = 'none';
-    document.getElementById('fareSec').style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = '출발지와 도착지를 선택해주세요';
-    curVeh = null;
-    return;
-  }
-  document.getElementById('vehicleSec').style.display = 'block';
-  var night = isNight();
-  ['s','v','b','B'].forEach(function(k) {
-    var price = night ? FARES[k].n : FARES[k].d;
-    document.getElementById('pr-' + k).textContent = price.toLocaleString('ko-KR') + '₫';
-  });
-  document.getElementById('fareSec').style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = '차량을 선택해주세요';
-  curVeh = null;
-  ['s','v','b','B'].forEach(function(k) {
-    document.getElementById('card-' + k).classList.remove('on');
-  });
+function onRoute(){
+  var f=document.getElementById("fromSel").value;
+  var t=document.getElementById("toSel").value;
+  var btn=document.getElementById("ctaBtn");
+  var opts=document.getElementById("toSel").options;
+  for(var i=0;i<opts.length;i++){if(opts[i].value&&opts[i].value===f){opts[i].disabled=true;opts[i].hidden=true;}else{opts[i].disabled=false;opts[i].hidden=false;}}
+  if(!f||!t||f===t){document.getElementById("vehicleSec").style.display="none";document.getElementById("fareSec").style.display="none";btn.disabled=true;btn.textContent="출발지와 도착지를 선택해주세요";curVeh=null;return;}
+  document.getElementById("vehicleSec").style.display="block";
+  var night=isNight();
+  var ks=["s","v","b","B"];
+  for(var k=0;k<ks.length;k++){document.getElementById("pr-"+ks[k]).textContent=(night?FARES[ks[k]].n:FARES[ks[k]].d).toLocaleString("ko-KR")+"d";}
+  document.getElementById("fareSec").style.display="none";
+  btn.disabled=true;btn.textContent="차량을 선택해주세요";curVeh=null;
+  for(var c=0;c<ks.length;c++){document.getElementById("card-"+ks[c]).classList.remove("on");}
 }
-
-function pickVehicle(k) {
-  curVeh = k;
-  ['s','v','b','B'].forEach(function(id) {
-    document.getElementById('card-' + id).classList.remove('on');
-  });
-  document.getElementById('card-' + k).classList.add('on');
-  var f = document.getElementById('fromSel').value;
-  var t = document.getElementById('toSel').value;
-  var night = isNight();
-  var fare = night ? FARES[k].n : FARES[k].d;
-  var eta = (f === 'camranh' || t === 'camranh') ? '약 45분' : '약 20분';
-  document.getElementById('fareRoute').textContent = LSHORT[f] + ' → ' + LSHORT[t];
-  document.getElementById('fareNum').textContent = fare.toLocaleString('ko-KR');
-  document.getElementById('fareTag').textContent = night ? '야간 할증' : '일반 요금';
-  document.getElementById('fareTag').className = 'faretag' + (night ? ' nt' : '');
-  document.getElementById('fareDetail').textContent = eta + ' 소요 · ' + VNAME[k];
-  document.getElementById('nightNotice').className = 'nn' + (night ? ' on' : '');
-  document.getElementById('fareSec').style.display = 'block';
-  var btn = document.getElementById('ctaBtn');
-  btn.disabled = false;
-  btn.textContent = '예약 신청하기 →';
+function pickV(k){
+  curVeh=k;
+  var ks=["s","v","b","B"];
+  for(var c=0;c<ks.length;c++){document.getElementById("card-"+ks[c]).classList.remove("on");}
+  document.getElementById("card-"+k).classList.add("on");
+  var f=document.getElementById("fromSel").value,t=document.getElementById("toSel").value;
+  var night=isNight(),fare=night?FARES[k].n:FARES[k].d;
+  var eta=(f==="camranh"||t==="camranh")?"약 45분":"약 20분";
+  document.getElementById("fareRoute").textContent=LSHORT[f]+" > "+LSHORT[t];
+  document.getElementById("fareNum").textContent=fare.toLocaleString("ko-KR");
+  document.getElementById("fareTag").textContent=night?"야간 할증":"일반 요금";
+  document.getElementById("fareTag").className="faretag"+(night?" nt":"");
+  document.getElementById("fareDetail").textContent=eta+" "+VNAME[k];
+  document.getElementById("nightNotice").className="nn"+(night?" on":"");
+  document.getElementById("fareSec").style.display="block";
+  var btn=document.getElementById("ctaBtn");btn.disabled=false;btn.textContent="예약 신청하기";
 }
-
-function setPay(m) {
-  curPay = m;
-  ['g','t','c'].forEach(function(k) {
-    document.getElementById('pay-' + k).classList.toggle('on', k === m);
-  });
+function setPay(m){curPay=m;var ks=["g","t","c"];for(var i=0;i<ks.length;i++){document.getElementById("pay-"+ks[i]).classList.toggle("on",ks[i]===m);}}
+function openSheet(){
+  var f=document.getElementById("fromSel").value,t=document.getElementById("toSel").value;
+  if(!f||!t||!curVeh)return;
+  var night=isNight(),fare=night?FARES[curVeh].n:FARES[curVeh].d;
+  var rows=[["출발지",LFULL[f]],["도착지",LFULL[t]],["차량",VNAME[curVeh]],["예약시각",nowStr()+(night?" (야간)":"")],["요금",fare.toLocaleString("ko-KR")+"d"],["결제",PNAME[curPay]]];
+  var h="";for(var i=0;i<rows.length;i++){h+='<div class="srow"><span class="sk">'+rows[i][0]+'</span><span class="sv">'+rows[i][1]+'</span></div>';}
+  document.getElementById("sheetRows").innerHTML=h;
+  document.getElementById("overlay").classList.add("on");
 }
-
-function openSheet() {
-  var f = document.getElementById('fromSel').value;
-  var t = document.getElementById('toSel').value;
-  if (!f || !t || !curVeh) return;
-  var night = isNight();
-  var fare = night ? FARES[curVeh].n : FARES[curVeh].d;
-  var rows = [
-    ['출발지', LFULL[f]],
-    ['도착지', LFULL[t]],
-    ['차량', VNAME[curVeh]],
-    ['예약시각', nowStr() + (night ? ' (야간)' : '')],
-    ['요금', fare.toLocaleString('ko-KR') + '₫'],
-    ['결제', PNAME[curPay]]
-  ];
-  document.getElementById('sheetRows').innerHTML = rows.map(function(r) {
-    return '<div class="srow"><span class="sk">' + r[0] + '</span><span class="sv">' + r[1] + '</span></div>';
-  }).join('');
-  document.getElementById('overlay').classList.add('on');
-}
-
-function closeSheet() {
-  document.getElementById('overlay').classList.remove('on');
-}
-
-function submitBook() {
+function closeSheet(){document.getElementById("overlay").classList.remove("on");}
+function submitBook(){
   closeSheet();
-  var f = document.getElementById('fromSel').value;
-  var t = document.getElementById('toSel').value;
-  var night = isNight();
-  var fare = night ? FARES[curVeh].n : FARES[curVeh].d;
-  var id = 'NT-' + Date.now().toString().slice(-6);
-  db.collection('bookings').doc(id).set({
-    id: id, from: f, to: t,
-    vehicle: curVeh, vehicleName: VNAME[curVeh],
-    fare: fare, night: night, pay: curPay,
-    time: nowStr(), status: 'new',
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(function() {
-    document.getElementById('bookingPanel').style.display = 'none';
-    document.getElementById('donePanel').className = 'done on';
-    document.getElementById('doneSub').textContent = LSHORT[f] + ' → ' + LSHORT[t] + '
-' + VNAME[curVeh] + ' · ' + fare.toLocaleString('ko-KR') + '₫';
-    document.getElementById('doneId').textContent = id;
-  }).catch(function(e) {
-    alert('예약 오류. 다시 시도해주세요.');
-    console.error(e);
-  });
+  var f=document.getElementById("fromSel").value,t=document.getElementById("toSel").value;
+  var night=isNight(),fare=night?FARES[curVeh].n:FARES[curVeh].d;
+  var id="NT-"+Date.now().toString().slice(-6);
+  db.collection("bookings").doc(id).set({id:id,from:f,to:t,vehicle:curVeh,vehicleName:VNAME[curVeh],fare:fare,night:night,pay:curPay,time:nowStr(),status:"new",createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+  .then(function(){document.getElementById("bookingPanel").style.display="none";document.getElementById("donePanel").className="done on";document.getElementById("doneSub").textContent=LSHORT[f]+" > "+LSHORT[t]+"\n"+VNAME[curVeh]+" "+fare.toLocaleString("ko-KR")+"d";document.getElementById("doneId").textContent=id;})
+  .catch(function(e){alert("예약 오류. 다시 시도해주세요.");console.error(e);});
 }
-
-function resetApp() {
-  document.getElementById('bookingPanel').style.display = 'block';
-  document.getElementById('donePanel').className = 'done';
-  document.getElementById('fromSel').value = '';
-  document.getElementById('toSel').value = '';
-  document.getElementById('vehicleSec').style.display = 'none';
-  document.getElementById('fareSec').style.display = 'none';
-  curVeh = null; curPay = 'g';
-  var btn = document.getElementById('ctaBtn');
-  btn.disabled = true;
-  btn.textContent = '출발지와 도착지를 선택해주세요';
-}
+function resetApp(){document.getElementById("bookingPanel").style.display="block";document.getElementById("donePanel").className="done";document.getElementById("fromSel").value="";document.getElementById("toSel").value="";document.getElementById("vehicleSec").style.display="none";document.getElementById("fareSec").style.display="none";curVeh=null;curPay="g";var btn=document.getElementById("ctaBtn");btn.disabled=true;btn.textContent="출발지와 도착지를 선택해주세요";}
 </script>
 </body>
 </html>
