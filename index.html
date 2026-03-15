@@ -46,8 +46,8 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
 .vca{font-size:11px;color:#888;margin-top:2px}
 .vp{font-size:12px;font-weight:500;color:var(--n);margin-top:4px}
 .fc{background:var(--n);border-radius:13px;padding:15px;color:#fff;margin-bottom:10px}
-.fr{font-size:11px;opacity:.6;margin-bottom:5px}
-.fa{font-size:28px;font-weight:500;letter-spacing:-1px}
+.frt{font-size:11px;opacity:.6;margin-bottom:5px}
+.fa2{font-size:28px;font-weight:500;letter-spacing:-1px}
 .fw{font-size:14px;opacity:.65;margin-left:2px}
 .frow{display:flex;justify-content:space-between;align-items:flex-start}
 .ft{font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;background:var(--k);color:var(--kd)}
@@ -77,12 +77,12 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
 .done.on{display:block}
 .dc{width:64px;height:64px;background:var(--k);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px}
 .dt{font-size:20px;font-weight:500;margin-bottom:6px}
-.ds2{font-size:13px;color:#888;line-height:1.6;white-space:pre-line}
-.di{display:inline-block;background:#f0f4f8;color:var(--n);font-size:13px;font-weight:500;padding:6px 14px;border-radius:20px;margin:12px 0}
+.dsub{font-size:13px;color:#888;line-height:1.6;white-space:pre-line}
+.did{display:inline-block;background:#f0f4f8;color:var(--n);font-size:13px;font-weight:500;padding:6px 14px;border-radius:20px;margin:12px 0}
 .steps{background:#f7f8fa;border-radius:12px;padding:14px;margin-top:14px;text-align:left}
 .step{display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;font-size:13px;color:#555;line-height:1.4}
 .step:last-child{margin:0}
-.sn{background:var(--n);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.snum{background:var(--n);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .rb2{width:100%;margin-top:18px;padding:14px;background:var(--n);color:#fff;border:none;border-radius:12px;font-size:15px;font-family:inherit;cursor:pointer}
 .tb{display:flex;border-top:.5px solid #eee;background:#fff}
 .tab{flex:1;padding:10px 4px 8px;text-align:center;cursor:pointer;font-size:10px;color:#bbb}
@@ -96,127 +96,202 @@ select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;fo
   <div class="hd"><div class="hd-t">나트랑 택시투어</div><div class="hd-s">Nha Trang Taxi Tour &middot; Xe d&#7883;ch v&#7909;</div></div>
   <div class="mw"><div class="map">
     <div class="mr"></div><div class="mr2"></div>
-    <div class="mc"><div class="car" style="top:22%;left:14%">&#128661;</div><div class="car" style="top:50%;right:16%">&#128661;</div><div class="car" style="top:28%;right:40%">&#128652;</div></div>
+    <div class="mc">
+      <div class="car" style="top:22%;left:14%">&#128661;</div>
+      <div class="car" style="top:50%;right:16%">&#128661;</div>
+      <div class="car" style="top:28%;right:40%">&#128652;</div>
+    </div>
     <div class="mp"><div class="pb"><div class="pd"></div></div><div class="ps"></div></div>
     <div class="mi">인근 차량 3대 대기중</div>
   </div></div>
-  <div class="panel" id="bp">
+
+  <div class="panel" id="bookingPanel">
     <div class="sl">경로 선택</div>
     <div class="rb">
       <div class="rr"><div class="dot ds"></div>
-        <select id="fs" onchange="rc()">
+        <select id="fromSel" onchange="onRC()">
           <option value="">출발지 선택</option>
           <option value="c">&#9992; 캄란 공항 (Cam Ranh)</option>
           <option value="t">&#127961; 나트랑 시내</option>
-        </select></div>
+        </select>
+      </div>
       <div class="rr"><div class="dot de"></div>
-        <select id="ts" onchange="rc()">
+        <select id="toSel" onchange="onRC()">
           <option value="">도착지 선택</option>
           <option value="t">&#127961; 나트랑 시내</option>
           <option value="c">&#9992; 캄란 공항 (Cam Ranh)</option>
-        </select></div>
+        </select>
+      </div>
     </div>
-    <div id="vs" style="display:none">
+
+    <div id="vehicleSection" style="display:none">
       <div class="sl">차량 선택</div>
       <div class="vg">
-        <div class="vc" id="vs" onclick="sv('s')"><div class="vi">&#128661;</div><div class="vn">소형</div><div class="vca">4~7인승</div><div class="vp" id="pp-s">-</div></div>
-        <div class="vc" id="vv" onclick="sv('v')"><div class="vi">&#128652;</div><div class="vn">16인승</div><div class="vca">미니버스</div><div class="vp" id="pp-v">-</div></div>
-        <div class="vc" id="vb" onclick="sv('b')"><div class="vi">&#128654;</div><div class="vn">29인승</div><div class="vca">중형버스</div><div class="vp" id="pp-b">-</div></div>
-        <div class="vc" id="vB" onclick="sv('B')"><div class="vi">&#128653;</div><div class="vn">45인승</div><div class="vca">대형버스</div><div class="vp" id="pp-B">-</div></div>
+        <div class="vc" id="card-s" onclick="selV('s')"><div class="vi">&#128661;</div><div class="vn">소형</div><div class="vca">4~7인승</div><div class="vp" id="price-s">-</div></div>
+        <div class="vc" id="card-v" onclick="selV('v')"><div class="vi">&#128652;</div><div class="vn">16인승</div><div class="vca">미니버스</div><div class="vp" id="price-v">-</div></div>
+        <div class="vc" id="card-b" onclick="selV('b')"><div class="vi">&#128654;</div><div class="vn">29인승</div><div class="vca">중형버스</div><div class="vp" id="price-b">-</div></div>
+        <div class="vc" id="card-B" onclick="selV('B')"><div class="vi">&#128653;</div><div class="vn">45인승</div><div class="vca">대형버스</div><div class="vp" id="price-B">-</div></div>
       </div>
     </div>
-    <div id="fa" style="display:none">
-      <div class="fc"><div class="fr" id="frt">-</div><div class="frow"><div><span class="fa" id="fn">-</span><span class="fw">&#8363;</span></div><div class="ft" id="ftg">일반 요금</div></div><div class="fd" id="fdt">약 45분 소요</div></div>
-      <div class="nn" id="nn">&#127769; 야간 할증 적용 (19:00 이후)</div>
+
+    <div id="fareArea" style="display:none">
+      <div class="fc">
+        <div class="frt" id="fareRoute">-</div>
+        <div class="frow">
+          <div><span class="fa2" id="fareNum">-</span><span class="fw">&#8363;</span></div>
+          <div class="ft" id="fareTag">일반 요금</div>
+        </div>
+        <div class="fd" id="fareDetail">약 45분 소요</div>
+      </div>
+      <div class="nn" id="nightNotice">&#127769; 야간 할증 적용 (19:00 이후)</div>
       <div class="sl">결제 수단</div>
       <div class="pr">
-        <button class="pb2 on" id="pg" onclick="sp('g')"><span class="pi">&#128179;</span>GLN</button>
-        <button class="pb2" id="pt" onclick="sp('t')"><span class="pi">&#9992;</span>트래플월렛</button>
-        <button class="pb2" id="pc" onclick="sp('c')"><span class="pi">&#128181;</span>현금</button>
+        <button class="pb2 on" id="pay-g" onclick="setPay('g')"><span class="pi">&#128179;</span>GLN</button>
+        <button class="pb2" id="pay-t" onclick="setPay('t')"><span class="pi">&#9992;</span>트래플월렛</button>
+        <button class="pb2" id="pay-c" onclick="setPay('c')"><span class="pi">&#128181;</span>현금</button>
       </div>
     </div>
-    <button class="cta" id="cb" disabled onclick="os()">출발지와 도착지를 선택해주세요</button>
+
+    <button class="cta" id="ctaBtn" disabled onclick="openSheet()">출발지와 도착지를 선택해주세요</button>
   </div>
-  <div class="done" id="dp">
-    <div class="dc">&#10003;</div><div class="dt">예약 접수 완료!</div>
-    <div class="ds2" id="dsub"></div><div class="di" id="did"></div>
+
+  <div class="done" id="donePanel">
+    <div class="dc">&#10003;</div>
+    <div class="dt">예약 접수 완료!</div>
+    <div class="dsub" id="doneSub"></div>
+    <div class="did" id="doneId"></div>
     <div class="steps">
-      <div class="step"><div class="sn">1</div><span>담당 직원이 Zalo 기사 단체방에 배차 요청을 전달합니다</span></div>
-      <div class="step"><div class="sn">2</div><span>선착순으로 기사님이 수락 후 도착 예정 시간을 알려드립니다</span></div>
-      <div class="step"><div class="sn">3</div><span>차량 번호와 기사 정보를 연락처로 발송해드립니다</span></div>
+      <div class="step"><div class="snum">1</div><span>담당 직원이 Zalo 기사 단체방에 배차 요청을 전달합니다</span></div>
+      <div class="step"><div class="snum">2</div><span>선착순으로 기사님이 수락 후 도착 예정 시간을 알려드립니다</span></div>
+      <div class="step"><div class="snum">3</div><span>차량 번호와 기사 정보를 연락처로 발송해드립니다</span></div>
     </div>
-    <button class="rb2" onclick="ra()">새 예약하기</button>
+    <button class="rb2" onclick="resetApp()">새 예약하기</button>
   </div>
+
   <div class="tb">
     <div class="tab on"><span class="ti">&#128661;</span>택시</div>
     <div class="tab"><span class="ti">&#128506;</span>투어</div>
     <div class="tab"><span class="ti">&#128203;</span>내 예약</div>
   </div>
 </div>
-<div class="ov" id="ov"><div class="sh">
-  <div class="shb"></div><div class="sht">예약 최종 확인</div>
-  <div id="sr"></div>
-  <div class="sbr"><button class="sbc" onclick="cs()">취소</button><button class="sbo" onclick="sub()">예약 완료 &#128661;</button></div>
-</div></div>
+
+<div class="ov" id="overlay">
+  <div class="sh">
+    <div class="shb"></div>
+    <div class="sht">예약 최종 확인</div>
+    <div id="sheetRows"></div>
+    <div class="sbr">
+      <button class="sbc" onclick="closeSheet()">취소</button>
+      <button class="sbo" onclick="submitBooking()">예약 완료 &#128661;</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const FC={apiKey:"AIzaSyAEzcyWQKvUH8FMtujWcqGNKjWx18LxswI",authDomain:"nhatrang-taxi.firebaseapp.com",projectId:"nhatrang-taxi",storageBucket:"nhatrang-taxi.firebasestorage.app",messagingSenderId:"647488499522",appId:"1:647488499522:web:a341a36256062e78a122db"};
 firebase.initializeApp(FC);
 const db=firebase.firestore();
-const FR={s:{d:250000,n:300000},v:{d:550000,n:650000},b:{d:900000,n:1050000},B:{d:1300000,n:1500000}};
+const FARES={s:{d:250000,n:300000},v:{d:550000,n:650000},b:{d:900000,n:1050000},B:{d:1300000,n:1500000}};
 const VN={s:'소형 (4~7인승)',v:'16인승 미니버스',b:'29인승 중형버스',B:'45인승 대형버스'};
 const LN={c:'캄란 공항',t:'나트랑 시내'};
 const LF={c:'&#9992; 캄란 공항 (Cam Ranh)',t:'&#127961; 나트랑 시내'};
 const PN={g:'GLN',t:'트래플월렛',c:'현금'};
-let sel=null,pay='g';
-const iN=()=>new Date().getHours()>=19;
-const nw=()=>{const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');};
-setInterval(()=>{document.getElementById('ct').textContent=nw();},10000);
-function rc(){
-  const f=document.getElementById('fs').value,t=document.getElementById('ts').value,cb=document.getElementById('cb');
-  Array.from(document.getElementById('ts').options).forEach(o=>{o.value&&o.value===f?(o.disabled=o.hidden=true):(o.disabled=o.hidden=false);});
-  if(!f||!t||f===t){document.getElementById('vs').style.display='none';document.getElementById('fa').style.display='none';cb.disabled=true;cb.textContent='출발지와 도착지를 선택해주세요';sel=null;return;}
-  document.getElementById('vs').style.display='block';
-  const n=iN();Object.keys(FR).forEach(k=>{document.getElementById('pp-'+k).textContent=(n?FR[k].n:FR[k].d).toLocaleString('ko-KR')+'&#8363;';});
-  document.getElementById('fa').style.display='none';cb.disabled=true;cb.textContent='차량을 선택해주세요';sel=null;
-  ['vs','vv','vb','vB'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
+let selVeh=null, selPay='g';
+
+function isNight(){return new Date().getHours()>=19;}
+function now(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
+setInterval(()=>{document.getElementById('ct').textContent=now();},10000);
+
+function onRC(){
+  const f=document.getElementById('fromSel').value;
+  const t=document.getElementById('toSel').value;
+  const btn=document.getElementById('ctaBtn');
+  Array.from(document.getElementById('toSel').options).forEach(o=>{
+    if(o.value&&o.value===f){o.disabled=true;o.hidden=true;}
+    else{o.disabled=false;o.hidden=false;}
+  });
+  if(!f||!t||f===t){
+    document.getElementById('vehicleSection').style.display='none';
+    document.getElementById('fareArea').style.display='none';
+    btn.disabled=true; btn.textContent='출발지와 도착지를 선택해주세요';
+    selVeh=null; return;
+  }
+  document.getElementById('vehicleSection').style.display='block';
+  const night=isNight();
+  ['s','v','b','B'].forEach(k=>{
+    document.getElementById('price-'+k).textContent=(night?FARES[k].n:FARES[k].d).toLocaleString('ko-KR')+'&#8363;';
+  });
+  document.getElementById('fareArea').style.display='none';
+  btn.disabled=true; btn.textContent='차량을 선택해주세요'; selVeh=null;
+  ['s','v','b','B'].forEach(k=>document.getElementById('card-'+k).classList.remove('on'));
 }
-function sv(k){
-  sel=k;
-  ['vs','vv','vb','vB'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
-  const map={s:'vs',v:'vv',b:'vb',B:'vB'};
-  document.getElementById(map[k])?.classList.add('on');
-  const f=document.getElementById('fs').value,t=document.getElementById('ts').value,n=iN(),fare=n?FR[k].n:FR[k].d;
-  document.getElementById('frt').textContent=LN[f]+' → '+LN[t];
-  document.getElementById('fn').textContent=fare.toLocaleString('ko-KR');
-  document.getElementById('ftg').textContent=n?'야간 할증':'일반 요금';
-  document.getElementById('ftg').className='ft'+(n?' nt':'');
-  document.getElementById('fdt').textContent=((f==='c'||t==='c')?'약 45분':'약 20분')+' 소요 · '+VN[k];
-  document.getElementById('nn').className='nn'+(n?' on':'');
-  document.getElementById('fa').style.display='block';
-  const cb=document.getElementById('cb');cb.disabled=false;cb.textContent='예약 신청하기 →';
+
+function selV(k){
+  selVeh=k;
+  ['s','v','b','B'].forEach(id=>document.getElementById('card-'+id).classList.remove('on'));
+  document.getElementById('card-'+k).classList.add('on');
+  const f=document.getElementById('fromSel').value, t=document.getElementById('toSel').value;
+  const night=isNight(), fare=night?FARES[k].n:FARES[k].d;
+  document.getElementById('fareRoute').textContent=LN[f]+' → '+LN[t];
+  document.getElementById('fareNum').textContent=fare.toLocaleString('ko-KR');
+  document.getElementById('fareTag').textContent=night?'야간 할증':'일반 요금';
+  document.getElementById('fareTag').className='ft'+(night?' nt':'');
+  document.getElementById('fareDetail').textContent=((f==='c'||t==='c')?'약 45분':'약 20분')+' 소요 · '+VN[k];
+  document.getElementById('nightNotice').className='nn'+(night?' on':'');
+  document.getElementById('fareArea').style.display='block';
+  const btn=document.getElementById('ctaBtn');
+  btn.disabled=false; btn.textContent='예약 신청하기 →';
 }
-function sp(m){pay=m;['g','t','c'].forEach(k=>{document.getElementById('p'+k)?.classList.toggle('on',k===m);});}
-function os(){
-  const f=document.getElementById('fs').value,t=document.getElementById('ts').value;
-  if(!f||!t||!sel)return;
-  const n=iN(),fare=n?FR[sel].n:FR[sel].d;
-  document.getElementById('sr').innerHTML=[['출발지',LF[f]],['도착지',LF[t]],['차량',VN[sel]],['예약시각',nw()+(n?' (야간)':'')],['요금',fare.toLocaleString('ko-KR')+'&#8363;'],['결제',PN[pay]]].map(([k,v])=>'<div class="srow"><span class="sk">'+k+'</span><span class="sv">'+v+'</span></div>').join('');
-  document.getElementById('ov').classList.add('on');
+
+function setPay(m){
+  selPay=m;
+  ['g','t','c'].forEach(k=>document.getElementById('pay-'+k).classList.toggle('on',k===m));
 }
-function cs(){document.getElementById('ov').classList.remove('on');}
-async function sub(){
-  cs();
-  const f=document.getElementById('fs').value,t=document.getElementById('ts').value,n=iN(),fare=n?FR[sel].n:FR[sel].d,id='NT-'+Date.now().toString().slice(-6);
+
+function openSheet(){
+  const f=document.getElementById('fromSel').value, t=document.getElementById('toSel').value;
+  if(!f||!t||!selVeh)return;
+  const night=isNight(), fare=night?FARES[selVeh].n:FARES[selVeh].d;
+  document.getElementById('sheetRows').innerHTML=[
+    ['출발지',LF[f]],['도착지',LF[t]],['차량',VN[selVeh]],
+    ['예약시각',now()+(night?' (야간)':'')],
+    ['요금',fare.toLocaleString('ko-KR')+'&#8363;'],['결제',PN[selPay]]
+  ].map(([k,v])=>'<div class="srow"><span class="sk">'+k+'</span><span class="sv">'+v+'</span></div>').join('');
+  document.getElementById('overlay').classList.add('on');
+}
+
+function closeSheet(){document.getElementById('overlay').classList.remove('on');}
+
+async function submitBooking(){
+  closeSheet();
+  const f=document.getElementById('fromSel').value, t=document.getElementById('toSel').value;
+  const night=isNight(), fare=night?FARES[selVeh].n:FARES[selVeh].d;
+  const id='NT-'+Date.now().toString().slice(-6);
   try{
-    await db.collection('bookings').doc(id).set({id,from:f,to:t,vehicle:sel,vehicleName:VN[sel],fare,night:n,pay,time:nw(),status:'new',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    document.getElementById('bp').style.display='none';
-    document.getElementById('dp').className='done on';
-    document.getElementById('dsub').textContent=LN[f]+' → '+LN[t]+'
-'+VN[sel]+' · '+fare.toLocaleString('ko-KR')+'&#8363;';
-    document.getElementById('did').textContent=id;
+    await db.collection('bookings').doc(id).set({
+      id, from:f, to:t, vehicle:selVeh, vehicleName:VN[selVeh],
+      fare, night, pay:selPay, time:now(), status:'new',
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    document.getElementById('bookingPanel').style.display='none';
+    document.getElementById('donePanel').className='done on';
+    document.getElementById('doneSub').textContent=LN[f]+' → '+LN[t]+'
+'+VN[selVeh]+' · '+fare.toLocaleString('ko-KR')+'&#8363;';
+    document.getElementById('doneId').textContent=id;
   }catch(e){alert('예약 오류. 다시 시도해주세요.');console.error(e);}
 }
-function ra(){document.getElementById('bp').style.display='block';document.getElementById('dp').className='done';document.getElementById('fs').value='';document.getElementById('ts').value='';document.getElementById('vs').style.display='none';document.getElementById('fa').style.display='none';sel=null;pay='g';const cb=document.getElementById('cb');cb.disabled=true;cb.textContent='출발지와 도착지를 선택해주세요';}
+
+function resetApp(){
+  document.getElementById('bookingPanel').style.display='block';
+  document.getElementById('donePanel').className='done';
+  document.getElementById('fromSel').value='';
+  document.getElementById('toSel').value='';
+  document.getElementById('vehicleSection').style.display='none';
+  document.getElementById('fareArea').style.display='none';
+  selVeh=null; selPay='g';
+  const btn=document.getElementById('ctaBtn');
+  btn.disabled=true; btn.textContent='출발지와 도착지를 선택해주세요';
+}
 </script>
 </body>
 </html>
