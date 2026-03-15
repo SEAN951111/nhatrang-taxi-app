@@ -1,5 +1,116 @@
 <!DOCTYPE html>
-<html lang="ko"><head><meta charset="UTF-8"><title>직원 대시보드</title>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나트랑 택시투어 — 직원 대시보드</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-</head><body><h1>직원 대시보드 - 로딩중</h1></body></html>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f5;min-height:100vh;}
+.topbar{background:#1B2A3B;padding:13px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.topbar-title{color:#fff;font-size:16px;font-weight:500;}
+.topbar-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.live-dot{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.7);font-size:12px;}
+.dot{width:7px;height:7px;background:#4CAF50;border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.badge{background:#FEE500;color:#3C1E1E;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 24px 0;}
+.stat{background:#fff;border-radius:12px;padding:14px 16px;border:0.5px solid #e8eaed;}
+.stat-num{font-size:26px;font-weight:500;color:#1B2A3B;}
+.stat-label{font-size:11px;color:#999;margin-top:3px;}
+.notif{background:#1B2A3B;color:#fff;padding:12px 20px;margin:14px 24px 0;border-radius:12px;display:none;align-items:center;gap:10px;font-size:13px;}
+.notif.on{display:flex;}
+.notif-close{margin-left:auto;cursor:pointer;opacity:0.6;font-size:18px;}
+.layout{display:grid;grid-template-columns:1fr 380px;padding:14px 24px;gap:16px;}
+.col-title{font-size:11px;font-weight:500;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.booking-list{display:flex;flex-direction:column;gap:8px;}
+.booking-card{background:#fff;border:0.5px solid #e8eaed;border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color 0.15s;}
+.booking-card:hover{border-color:#1B2A3B;}
+.booking-card.selected{border-color:#1B2A3B;border-width:1.5px;background:#f5f8fc;}
+.booking-card.is-new{border-left:3px solid #FEE500;}
+.booking-card.is-done{opacity:0.6;border-left:3px solid #4CAF50;}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.card-id{font-size:12px;color:#aaa;}
+.bs{font-size:10px;font-weight:500;padding:3px 8px;border-radius:16px;}
+.bs-new{background:#fff8e1;color:#e65100;}
+.bs-done{background:#e8f5e9;color:#2e7d32;}
+.card-route{font-size:14px;font-weight:500;color:#1a1a1a;margin-bottom:4px;}
+.card-meta{font-size:12px;color:#888;display:flex;gap:8px;flex-wrap:wrap;}
+.no-bookings{background:#fff;border-radius:12px;padding:48px 24px;text-align:center;color:#ccc;font-size:14px;border:0.5px dashed #e0e0e0;}
+.side-inner{background:#fff;border:0.5px solid #e8eaed;border-radius:14px;padding:20px;position:sticky;top:78px;}
+.empty-hint{text-align:center;padding:40px 16px;color:#bbb;font-size:13px;line-height:1.6;}
+.detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid #f5f5f5;font-size:13px;}
+.detail-row:last-child{border:none;}
+.dk{color:#888;}.dv{font-weight:500;}
+.msg-box{background:#f1f8e9;border:0.5px solid #aed581;border-radius:10px;padding:13px;font-size:13px;color:#33691e;line-height:1.65;white-space:pre-wrap;word-break:break-all;margin:10px 0 14px;max-height:220px;overflow-y:auto;}
+.btn-copy-big{width:100%;padding:16px;background:#FEE500;color:#3C1E1E;border:none;border-radius:12px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-bottom:10px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-copy-big:hover{opacity:0.88;}
+.btn-copy-big.copied{background:#4CAF50;color:#fff;}
+.copy-hint{font-size:12px;color:#888;text-align:center;margin-bottom:12px;}
+.btn-done{width:100%;padding:12px;background:#f5f5f5;border:0.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;color:#555;transition:all 0.12s;}
+.btn-done:hover{border-color:#1B2A3B;color:#1B2A3B;}
+.btn-done.is-done{background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7;cursor:default;}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr);}.layout{grid-template-columns:1fr;padding:12px 16px;}.side-inner{position:static;}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div><div class="topbar-title">나트랑 택시투어 — 직원 대시보드</div><div class="topbar-sub">실시간 예약 관리 · Firebase 연동</div></div>
+  <div class="topbar-right"><div class="live-dot"><div class="dot"></div><span id="clockStr">-</span></div><div class="badge">직원 전용</div></div>
+</div>
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="sWait">0</div><div class="stat-label">⏳ 대기 중</div></div>
+  <div class="stat"><div class="stat-num" id="sDone">0</div><div class="stat-label">✅ 배차 완료</div></div>
+  <div class="stat"><div class="stat-num" id="sTotal">0</div><div class="stat-label">오늘 총 예약</div></div>
+  <div class="stat"><div class="stat-num" id="sRevenue">0</div><div class="stat-label">오늘 매출 (만d)</div></div>
+</div>
+<div class="notif" id="notif"><span style="font-size:20px">🚕</span><span id="notifText">새 예약!</span><span class="notif-close" onclick="this.parentElement.classList.remove('on')">✕</span></div>
+<div class="layout">
+  <div>
+    <div class="col-title">오늘 예약 목록 (실시간)</div>
+    <div class="booking-list" id="bookingList"><div class="no-bookings">Firebase 연결 후 예약이 실시간으로 표시됩니다</div></div>
+  </div>
+  <div>
+    <div class="col-title">배차 메시지</div>
+    <div class="side-inner" id="sideInner"><div class="empty-hint">← 왼쪽에서 예약 선택<br>Zalo 메시지 자동 생성</div></div>
+  </div>
+</div>
+<script>
+const firebaseConfig={apiKey:"AIzaSyAEzcyWQKvUH8FMtujWcqGNKjWx18LxswI",authDomain:"nhatrang-taxi.firebaseapp.com",projectId:"nhatrang-taxi",storageBucket:"nhatrang-taxi.firebasestorage.app",messagingSenderId:"647488499522",appId:"1:647488499522:web:a341a36256062e78a122db"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const LOC={camranh:'캄란 공항',city:'나트랑 시내'};
+const LF={camranh:'✈ 캄란 공항',city:'🏙 나트랑 시내'};
+const PAY={gln:'GLN',tw:'트래플월렛',cash:'현금'};
+let bookings=[],selectedId=null,isFirst=true;
+function updateClock(){const d=new Date();document.getElementById('clockStr').textContent=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
+updateClock();setInterval(updateClock,10000);
+function todayStart(){const d=new Date();d.setHours(0,0,0,0);return firebase.firestore.Timestamp.fromDate(d);}
+db.collection('bookings').where('createdAt','>=',todayStart()).orderBy('createdAt','desc').onSnapshot(snap=>{
+  snap.docChanges().forEach(c=>{if(c.type==='added'&&!isFirst){const b=c.doc.data();showNotif('새 예약! '+LOC[b.from]+' → '+LOC[b.to]+' · '+(b.fare||0).toLocaleString('ko-KR')+'d');}});
+  isFirst=false;bookings=snap.docs.map(d=>({docId:d.id,...d.data()}));renderStats();renderList();if(selectedId)renderSide(selectedId);
+});
+function showNotif(msg){const el=document.getElementById('notif');document.getElementById('notifText').textContent=msg;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),6000);}
+function renderStats(){const w=bookings.filter(b=>b.status==='new').length,d=bookings.filter(b=>b.status==='dispatched').length,r=bookings.filter(b=>b.status==='dispatched').reduce((s,b)=>s+(b.fare||0),0);document.getElementById('sWait').textContent=w;document.getElementById('sDone').textContent=d;document.getElementById('sTotal').textContent=bookings.length;document.getElementById('sRevenue').textContent=Math.round(r/10000);}
+function renderList(){const list=document.getElementById('bookingList');if(!bookings.length){list.innerHTML='<div class="no-bookings">아직 예약이 없습니다<br><small style="font-size:12px;margin-top:6px;display:block">손님이 앱에서 예약하면 여기 나타납니다</small></div>';return;}list.innerHTML=bookings.map(b=>'<div class="booking-card '+(b.status==='new'?'is-new':'is-done')+(selectedId===b.id?' selected':'')+'" onclick="selectBooking(''+b.id+'')"><div class="card-top"><span class="card-id">'+b.id+' · '+b.time+'</span><span class="bs '+(b.status==='new'?'bs-new':'bs-done')+'">'+(b.status==='new'?'⏳ 대기':'✅ 완료')+'</span></div><div class="card-route">'+(LF[b.from]||b.from)+' → '+(LF[b.to]||b.to)+'</div><div class="card-meta"><span>'+(b.vehicleName||'-')+'</span><span>'+(b.fare||0).toLocaleString('ko-KR')+'d'+(b.night?' 🌙':'')+'</span><span>'+(PAY[b.pay]||'')+'</span></div></div>').join('');}
+function selectBooking(id){selectedId=id;renderList();renderSide(id);}
+function buildMsg(b){const eta=(b.from==='camranh'||b.to==='camranh')?'약 45분':'약 20분';return '🚕 [나트랑 택시투어] 배차 요청
+━━━━━━━━━━━━━━
+📍 출발: '+LOC[b.from]+'
+🏁 도착: '+LOC[b.to]+'
+🚌 차량: '+(b.vehicleName||'-')+'
+💰 요금: '+(b.fare||0).toLocaleString('ko-KR')+'d'+(b.night?' (야간)':'')+'
+💳 결제: '+(PAY[b.pay]||'')+'
+⏰ 접수: '+b.time+'
+━━━━━━━━━━━━━━
+예상 소요: '+eta+'
+수락 가능한 기사님 댓글 남겨주세요! 👇';}
+function renderSide(id){const b=bookings.find(x=>x.id===id);if(!b)return;const msg=buildMsg(b),isDone=b.status==='dispatched';document.getElementById('sideInner').innerHTML='<div class="col-title" style="margin-bottom:10px">예약 상세</div><div class="detail-row"><span class="dk">예약번호</span><span class="dv">'+b.id+'</span></div><div class="detail-row"><span class="dk">출발</span><span class="dv">'+LOC[b.from]+'</span></div><div class="detail-row"><span class="dk">도착</span><span class="dv">'+LOC[b.to]+'</span></div><div class="detail-row"><span class="dk">차량</span><span class="dv">'+(b.vehicleName||'-')+'</span></div><div class="detail-row"><span class="dk">요금</span><span class="dv">'+(b.fare||0).toLocaleString('ko-KR')+'d'+(b.night?' (야간)':'')+'</span></div><div class="detail-row"><span class="dk">결제</span><span class="dv">'+(PAY[b.pay]||'')+'</span></div><div class="detail-row"><span class="dk">접수</span><span class="dv">'+b.time+'</span></div><div style="font-size:11px;font-weight:500;color:#999;margin:14px 0 0;text-transform:uppercase;letter-spacing:0.5px">Zalo 발송 메시지</div><div class="msg-box">'+msg+'</div><button class="btn-copy-big" id="copyBtn" onclick="copyMsg(''+id+'')">📋 메시지 복사</button><div class="copy-hint" id="copyHint">복사 후 Zalo 기사 단체방에 붙여넣기 하세요</div><button class="btn-done '+(isDone?'is-done':'')+'" onclick="markDone(''+id+'')">'+(isDone?'✅ 배차 완료됨':'배차 완료로 표시')+'</button>';}
+function copyMsg(id){const b=bookings.find(x=>x.id===id);if(!b)return;const msg=buildMsg(b);navigator.clipboard?navigator.clipboard.writeText(msg):((t=>{document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);})(Object.assign(document.createElement('textarea'),{value:msg,style:'position:fixed;opacity:0'})));const btn=document.getElementById('copyBtn'),hint=document.getElementById('copyHint');btn.classList.add('copied');btn.innerHTML='✅ 복사 완료!';hint.textContent='✓ 클립보드 저장됨. Zalo를 열어 붙여넣기 하세요';hint.style.color='#2e7d32';setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='📋 메시지 복사';hint.textContent='복사 후 Zalo 기사 단체방에 붙여넣기 하세요';hint.style.color='#888';},4000);}
+async function markDone(id){const b=bookings.find(x=>x.id===id);if(!b||b.status==='dispatched')return;await db.collection('bookings').doc(id).update({status:'dispatched'});}
+</script>
+</body>
+</html>
