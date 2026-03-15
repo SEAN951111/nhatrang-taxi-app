@@ -1,1 +1,219 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"><title>나트랑 택시투어</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script></head><body><p style="font-family:sans-serif;padding:20px">잠시후 리다이렉트됩니다...</p><script>window.location.href='customer-app-v2.html'</script></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>나트랑 택시투어</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--kakao:#FEE500;--kakao-dark:#3C1E1E;--navy:#1B2A3B;}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f5;display:flex;justify-content:center;min-height:100vh;}
+.phone{width:100%;max-width:390px;background:#fff;min-height:100vh;display:flex;flex-direction:column;}
+.statusbar{background:var(--navy);padding:10px 20px 0;display:flex;justify-content:space-between;}
+.statusbar span{color:rgba(255,255,255,0.8);font-size:11px;}
+.header{background:var(--navy);padding:14px 20px 18px;color:#fff;}
+.header-title{font-size:19px;font-weight:500;letter-spacing:-0.3px;}
+.header-sub{font-size:11px;opacity:0.55;margin-top:2px;}
+.map-wrap{background:var(--navy);padding:0 16px 16px;}
+.map{height:150px;background:#22364a;border-radius:14px;position:relative;overflow:hidden;}
+.map-road{position:absolute;bottom:28px;left:-10px;right:-10px;height:3px;background:rgba(255,255,255,0.12);transform:rotate(-4deg);}
+.map-road2{position:absolute;bottom:52px;left:-10px;right:-10px;height:2px;background:rgba(255,255,255,0.07);transform:rotate(2deg);}
+.map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-62%);}
+.pin-body{width:26px;height:26px;background:var(--kakao);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;}
+.pin-dot{width:9px;height:9px;background:var(--navy);border-radius:50%;transform:rotate(45deg);}
+.pin-shadow{width:9px;height:3px;background:rgba(0,0,0,0.2);border-radius:50%;margin:3px auto 0;}
+.map-cars{position:absolute;inset:0;}
+.car{position:absolute;font-size:16px;background:rgba(254,229,0,0.12);border:1px solid rgba(254,229,0,0.3);border-radius:5px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.map-info{position:absolute;bottom:10px;right:10px;background:rgba(27,42,59,0.85);color:#fff;font-size:11px;padding:4px 10px;border-radius:16px;border:0.5px solid rgba(255,255,255,0.15);}
+.panel{background:#fff;border-radius:18px 18px 0 0;margin-top:-10px;flex:1;padding:18px 16px;overflow-y:auto;}
+.sec-label{font-size:11px;font-weight:500;color:#999;margin-bottom:8px;}
+.route-box{background:#f7f8fa;border-radius:13px;margin-bottom:14px;}
+.route-row{display:flex;align-items:center;padding:12px 14px;gap:12px;}
+.route-row+.route-row{border-top:0.5px solid rgba(0,0,0,0.06);}
+.rdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.rdot.s{background:var(--navy);}
+.rdot.e{background:var(--kakao);border:1.5px solid #b8a200;}
+select{flex:1;border:none;background:transparent;font-size:15px;color:#1a1a1a;font-family:inherit;cursor:pointer;outline:none;appearance:none;}
+.vehicle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.v-card{border:1.5px solid #eee;border-radius:11px;padding:12px 10px;cursor:pointer;transition:all 0.12s;text-align:center;background:#fff;}
+.v-card:hover{border-color:#aaa;}
+.v-card.on{border-color:var(--navy);background:#f0f4f8;}
+.v-card.on .v-name{color:var(--navy);}
+.v-icon{font-size:22px;margin-bottom:4px;}
+.v-name{font-size:13px;font-weight:500;color:#333;}
+.v-cap{font-size:11px;color:#888;margin-top:2px;}
+.v-price{font-size:12px;font-weight:500;color:var(--navy);margin-top:4px;}
+.fare-card{background:var(--navy);border-radius:13px;padding:15px;color:#fff;margin-bottom:10px;}
+.fare-route{font-size:11px;opacity:0.6;margin-bottom:5px;}
+.fare-amount{font-size:28px;font-weight:500;letter-spacing:-1px;}
+.fare-won{font-size:14px;opacity:0.65;margin-left:2px;}
+.fare-row{display:flex;justify-content:space-between;align-items:flex-start;}
+.fare-tag{font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;background:var(--kakao);color:var(--kakao-dark);}
+.fare-tag.night{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);}
+.fare-detail{font-size:11px;opacity:0.5;border-top:0.5px solid rgba(255,255,255,0.1);padding-top:9px;margin-top:10px;}
+.night-notice{background:#fff8e1;border:0.5px solid #ffe082;border-radius:9px;padding:9px 12px;font-size:12px;color:#e65100;margin-bottom:10px;display:none;}
+.night-notice.on{display:flex;gap:6px;align-items:center;}
+.pay-row{display:flex;gap:8px;margin-bottom:16px;}
+.pay-btn{flex:1;padding:10px 4px;border-radius:10px;border:1.5px solid #eee;background:#fff;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer;text-align:center;transition:all 0.12s;color:#555;}
+.pay-btn.on{border-color:var(--navy);background:#f0f4f8;color:var(--navy);}
+.pay-icon{font-size:15px;display:block;margin-bottom:3px;}
+.cta{width:100%;padding:15px;background:var(--kakao);color:var(--kakao-dark);border:none;border-radius:13px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;transition:opacity 0.12s;letter-spacing:-0.3px;}
+.cta:disabled{background:#f0f0f0;color:#ccc;cursor:not-allowed;}
+.cta:hover:not(:disabled){opacity:0.88;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:50;align-items:flex-end;justify-content:center;}
+.overlay.on{display:flex;}
+.sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:390px;}
+.sheet-bar{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 18px;}
+.sheet-title{font-size:17px;font-weight:500;margin-bottom:14px;}
+.srow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid #f5f5f5;font-size:14px;}
+.srow:last-of-type{border:none;}
+.sk{color:#888;}.sv{font-weight:500;}
+.sbtn-row{display:flex;gap:8px;margin-top:14px;}
+.sbtn-cancel{flex:1;padding:14px;background:#f5f5f5;border:none;border-radius:11px;font-size:15px;font-family:inherit;cursor:pointer;}
+.sbtn-ok{flex:2;padding:14px;background:var(--kakao);border:none;border-radius:11px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--kakao-dark);}
+.done{display:none;padding:36px 20px;text-align:center;}
+.done.on{display:block;}
+.done-circle{width:64px;height:64px;background:var(--kakao);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;}
+.done-title{font-size:20px;font-weight:500;margin-bottom:6px;}
+.done-sub{font-size:13px;color:#888;line-height:1.6;white-space:pre-line;}
+.done-id{display:inline-block;background:#f0f4f8;color:var(--navy);font-size:13px;font-weight:500;padding:6px 14px;border-radius:20px;margin:12px 0;}
+.steps{background:#f7f8fa;border-radius:12px;padding:14px;margin-top:14px;text-align:left;}
+.step{display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;font-size:13px;color:#555;line-height:1.4;}
+.step:last-child{margin:0;}
+.snum{background:var(--navy);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.reset-btn{width:100%;margin-top:18px;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-size:15px;font-family:inherit;cursor:pointer;}
+.tab-bar{display:flex;border-top:0.5px solid #eee;background:#fff;}
+.tab{flex:1;padding:10px 4px 8px;text-align:center;cursor:pointer;font-size:10px;color:#bbb;}
+.tab.on{color:var(--navy);}
+.tab-icon{font-size:20px;display:block;margin-bottom:2px;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span id="clockTop">09:41</span><span>● 운영중</span></div>
+  <div class="header"><div class="header-title">나트랑 택시투어</div><div class="header-sub">Nha Trang Taxi Tour · Xe dịch vụ</div></div>
+  <div class="map-wrap"><div class="map">
+    <div class="map-road"></div><div class="map-road2"></div>
+    <div class="map-cars"><div class="car" style="top:22%;left:14%">🚕</div><div class="car" style="top:50%;right:16%">🚕</div><div class="car" style="top:28%;right:40%">🚌</div></div>
+    <div class="map-pin"><div class="pin-body"><div class="pin-dot"></div></div><div class="pin-shadow"></div></div>
+    <div class="map-info">인근 차량 3대 대기중</div>
+  </div></div>
+  <div class="panel" id="bookingPanel">
+    <div class="sec-label">경로 선택</div>
+    <div class="route-box">
+      <div class="route-row"><div class="rdot s"></div>
+        <select id="fromSel" onchange="onRouteChange()">
+          <option value="">출발지 선택</option>
+          <option value="camranh">✈ 캄란 공항 (Cam Ranh)</option>
+          <option value="city">🏙 나트랑 시내</option>
+        </select></div>
+      <div class="route-row"><div class="rdot e"></div>
+        <select id="toSel" onchange="onRouteChange()">
+          <option value="">도착지 선택</option>
+          <option value="city">🏙 나트랑 시내</option>
+          <option value="camranh">✈ 캄란 공항 (Cam Ranh)</option>
+        </select></div>
+    </div>
+    <div id="vehicleSection" style="display:none">
+      <div class="sec-label">차량 선택</div>
+      <div class="vehicle-grid">
+        <div class="v-card" id="v-small" onclick="selectVehicle('small')"><div class="v-icon">🚕</div><div class="v-name">소형</div><div class="v-cap">4~7인승</div><div class="v-price" id="vp-small">-</div></div>
+        <div class="v-card" id="v-van" onclick="selectVehicle('van')"><div class="v-icon">🚌</div><div class="v-name">16인승</div><div class="v-cap">미니버스</div><div class="v-price" id="vp-van">-</div></div>
+        <div class="v-card" id="v-bus29" onclick="selectVehicle('bus29')"><div class="v-icon">🚎</div><div class="v-name">29인승</div><div class="v-cap">중형버스</div><div class="v-price" id="vp-bus29">-</div></div>
+        <div class="v-card" id="v-bus45" onclick="selectVehicle('bus45')"><div class="v-icon">🚍</div><div class="v-name">45인승</div><div class="v-cap">대형버스</div><div class="v-price" id="vp-bus45">-</div></div>
+      </div>
+    </div>
+    <div id="fareArea" style="display:none">
+      <div class="fare-card"><div class="fare-route" id="fareRoute">-</div><div class="fare-row"><div><span class="fare-amount" id="fareNum">-</span><span class="fare-won">d</span></div><div class="fare-tag" id="fareTag">일반 요금</div></div><div class="fare-detail" id="fareDetail">약 45분 소요</div></div>
+      <div class="night-notice" id="nightNotice">🌙 야간 할증 적용 (19:00 이후)</div>
+      <div class="sec-label">결제 수단</div>
+      <div class="pay-row">
+        <button class="pay-btn on" id="pb-gln" onclick="setPay('gln')"><span class="pay-icon">💳</span>GLN</button>
+        <button class="pay-btn" id="pb-tw" onclick="setPay('tw')"><span class="pay-icon">✈</span>트래플월렛</button>
+        <button class="pay-btn" id="pb-cash" onclick="setPay('cash')"><span class="pay-icon">💵</span>현금</button>
+      </div>
+    </div>
+    <button class="cta" id="ctaBtn" disabled onclick="openSheet()">출발지와 도착지를 선택해주세요</button>
+  </div>
+  <div class="done" id="donePanel">
+    <div class="done-circle">✓</div><div class="done-title">예약 접수 완료!</div>
+    <div class="done-sub" id="doneSub"></div><div class="done-id" id="doneId"></div>
+    <div class="steps">
+      <div class="step"><div class="snum">1</div><span>담당 직원이 Zalo 기사 단체방에 배차 요청을 전달합니다</span></div>
+      <div class="step"><div class="snum">2</div><span>선착순으로 기사님이 수락 후 도착 예정 시간을 알려드립니다</span></div>
+      <div class="step"><div class="snum">3</div><span>차량 번호와 기사 정보를 연락처로 발송해드립니다</span></div>
+    </div>
+    <button class="reset-btn" onclick="resetApp()">새 예약하기</button>
+  </div>
+  <div class="tab-bar">
+    <div class="tab on"><span class="tab-icon">🚕</span>택시</div>
+    <div class="tab"><span class="tab-icon">🗺</span>투어</div>
+    <div class="tab"><span class="tab-icon">📋</span>내 예약</div>
+  </div>
+</div>
+<div class="overlay" id="overlay"><div class="sheet">
+  <div class="sheet-bar"></div><div class="sheet-title">예약 최종 확인</div>
+  <div id="sheetRows"></div>
+  <div class="sbtn-row"><button class="sbtn-cancel" onclick="closeSheet()">취소</button><button class="sbtn-ok" onclick="submitBooking()">예약 완료 🚕</button></div>
+</div></div>
+<script>
+const firebaseConfig={apiKey:"AIzaSyAEzcyWQKvUH8FMtujWcqGNKjWx18LxswI",authDomain:"nhatrang-taxi.firebaseapp.com",projectId:"nhatrang-taxi",storageBucket:"nhatrang-taxi.firebasestorage.app",messagingSenderId:"647488499522",appId:"1:647488499522:web:a341a36256062e78a122db"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const FARES={small:{day:250000,night:300000},van:{day:550000,night:650000},bus29:{day:900000,night:1050000},bus45:{day:1300000,night:1500000}};
+const VN={small:'소형 (4~7인승)',van:'16인승 미니버스',bus29:'29인승 중형버스',bus45:'45인승 대형버스'};
+const LS={camranh:'캄란 공항',city:'나트랑 시내'};
+const LF={camranh:'✈ 캄란 공항 (Cam Ranh)',city:'🏙 나트랑 시내'};
+const PN={gln:'GLN',tw:'트래플월렛',cash:'현금'};
+let sv=null,sp='gln';
+const isN=()=>new Date().getHours()>=19;
+const now=()=>{const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');};
+setInterval(()=>{document.getElementById('clockTop').textContent=now();},10000);
+function onRouteChange(){
+  const f=document.getElementById('fromSel').value,t=document.getElementById('toSel').value,c=document.getElementById('ctaBtn');
+  Array.from(document.getElementById('toSel').options).forEach(o=>{o.value&&o.value===f?(o.disabled=o.hidden=true):(o.disabled=o.hidden=false);});
+  if(!f||!t||f===t){document.getElementById('vehicleSection').style.display='none';document.getElementById('fareArea').style.display='none';c.disabled=true;c.textContent='출발지와 도착지를 선택해주세요';sv=null;return;}
+  document.getElementById('vehicleSection').style.display='block';
+  const n=isN();Object.keys(FARES).forEach(v=>{document.getElementById('vp-'+v).textContent=(n?FARES[v].night:FARES[v].day).toLocaleString('ko-KR')+'d';});
+  document.getElementById('fareArea').style.display='none';c.disabled=true;c.textContent='차량을 선택해주세요';sv=null;
+  ['small','van','bus29','bus45'].forEach(v=>document.getElementById('v-'+v).classList.remove('on'));
+}
+function selectVehicle(t){
+  sv=t;['small','van','bus29','bus45'].forEach(v=>document.getElementById('v-'+v).classList.toggle('on',v===t));
+  const f=document.getElementById('fromSel').value,to=document.getElementById('toSel').value,n=isN(),fare=n?FARES[t].night:FARES[t].day;
+  document.getElementById('fareRoute').textContent=LS[f]+' → '+LS[to];
+  document.getElementById('fareNum').textContent=fare.toLocaleString('ko-KR');
+  document.getElementById('fareTag').textContent=n?'야간 할증':'일반 요금';
+  document.getElementById('fareTag').className='fare-tag'+(n?' night':'');
+  document.getElementById('fareDetail').textContent=((f==='camranh'||to==='camranh')?'약 45분':'약 20분')+' 소요 · '+VN[t];
+  document.getElementById('nightNotice').className='night-notice'+(n?' on':'');
+  document.getElementById('fareArea').style.display='block';
+  const c=document.getElementById('ctaBtn');c.disabled=false;c.textContent='예약 신청하기 →';
+}
+function setPay(m){sp=m;['gln','tw','cash'].forEach(k=>document.getElementById('pb-'+k).classList.toggle('on',k===m));}
+function openSheet(){
+  const f=document.getElementById('fromSel').value,t=document.getElementById('toSel').value;
+  if(!f||!t||!sv)return;
+  const n=isN(),fare=n?FARES[sv].night:FARES[sv].day;
+  document.getElementById('sheetRows').innerHTML=[['출발지',LF[f]],['도착지',LF[t]],['차량',VN[sv]],['예약시각',now()+(n?' (야간)':'')],['요금',fare.toLocaleString('ko-KR')+'d'],['결제',PN[sp]]].map(([k,v])=>'<div class="srow"><span class="sk">'+k+'</span><span class="sv">'+v+'</span></div>').join('');
+  document.getElementById('overlay').classList.add('on');
+}
+function closeSheet(){document.getElementById('overlay').classList.remove('on');}
+async function submitBooking(){
+  closeSheet();
+  const f=document.getElementById('fromSel').value,t=document.getElementById('toSel').value,n=isN(),fare=n?FARES[sv].night:FARES[sv].day,id='NT-'+Date.now().toString().slice(-6);
+  try{
+    await db.collection('bookings').doc(id).set({id,from:f,to:t,vehicle:sv,vehicleName:VN[sv],fare,night:n,pay:sp,time:now(),status:'new',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    document.getElementById('bookingPanel').style.display='none';
+    document.getElementById('donePanel').className='done on';
+    document.getElementById('doneSub').textContent=LS[f]+' → '+LS[t]+'
+'+VN[sv]+' · '+fare.toLocaleString('ko-KR')+'d';
+    document.getElementById('doneId').textContent=id;
+  }catch(e){alert('예약 오류. 다시 시도해주세요.');console.error(e);}
+}
+function resetApp(){document.getElementById('bookingPanel').style.display='block';document.getElementById('donePanel').className='done';document.getElementById('fromSel').value='';document.getElementById('toSel').value='';document.getElementById('vehicleSection').style.display='none';document.getElementById('fareArea').style.display='none';sv=null;sp='gln';const c=document.getElementById('ctaBtn');c.disabled=true;c.textContent='출발지와 도착지를 선택해주세요';}
+</script>
+</body>
+</html>
