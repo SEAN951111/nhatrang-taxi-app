@@ -276,7 +276,7 @@ function pkV(k){
   document.getElementById("fRt").textContent=LS[f]+" \u2192 "+LS[t];
   document.getElementById("fNm").textContent=fare.toLocaleString("ko-KR");
   document.getElementById("fTag").textContent=nt?"\uc57c\uac04 \ud560\uc99d":"\uc77c\ubc18 \uc694\uae08";
-  document.getElementById("fTag").className="ftag"+(ni?" nt":"");
+  document.getElementById("fTag").className="ftag"+(nt?" nt":"");
   document.getElementById("fDt").textContent=((f==="cam"||t==="cam")?"\uc57d 45\ubd84":"\uc57d 20\ubd84")+" \uc18c\uc694 \u00b7 "+VN[k];
   document.getElementById("nightN").className="nn"+(nt?" on":"");
   document.getElementById("fSec").style.display="block";
